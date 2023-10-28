@@ -1,6 +1,7 @@
 use std::fmt::Display;
+use serde::{Serialize, Deserialize};
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Profile {
     pub title: String,
     pub name: String,

@@ -34,6 +34,14 @@ fn create_credentials_actions(storage: &mut Storage) {
 }
 
 fn select_profile(storage: &Storage) {
+    let profiles = storage.profiles();
+
+    if profiles.len() == 0 {
+        println!("No profiles available");
+
+        return;
+    }
+
     let selected = Select::new("What user do you want to use", storage.profiles())
         .prompt()
         .unwrap();

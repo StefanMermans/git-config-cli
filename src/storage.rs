@@ -1,41 +1,58 @@
+use std::fs::{self, File};
+
 use crate::profile::Profile;
 
 pub struct Storage {
-    credentials_vec: Vec<Profile>,
+    storage_dir: String,
 }
 
 impl Storage {
     pub fn new() -> Self{
-        // TODO: Not just static data (Get from file)
         Self {
-            credentials_vec: vec![
-                Profile {
-                    title: "Personal".to_string(),
-                    name: "Stefan Mermans".to_string(),
-                    email: "stefamermans99@gmail.com".to_string(),
-                },
-                Profile {
-                    title: "Work".to_string(),
-                    name: "Stefan Mermans".to_string(),
-                    email: "stefan@scrumble.nl".to_string(),
-                }
-            ]
-        }
+            // TODO: Dynamic storage dir
+            storage_dir: "./data/profiles.json".to_string(),
+        }   
     }
 
     pub fn delete_profile(&mut self, profile_to_delete: &Profile) {
-        // TODO: remove from a file.
-        if let Some(index) = self.credentials_vec.iter().position(|profile| profile.title == profile_to_delete.title) {
-            self.credentials_vec.swap_remove(index);
+        let mut profiles = self.load_profiles();
+        
+        if let Some(index) = profiles.iter().position(|profile| profile.title == profile_to_delete.title) {
+            profiles.swap_remove(index);
         }
+
+        self.save_profiles(&profiles);
     }
 
     pub fn profiles(&self) -> Vec<Profile>  {
-        (*self.credentials_vec).to_vec()
+        self.load_profiles()
     }
 
     pub fn store(&mut self, credentials: Profile) {
-        // TODO: Store in a file
-        self.credentials_vec.push(credentials);
+        let mut profiles = self.load_profiles();
+        profiles.push(credentials);
+        self.save_profiles(&profiles);
+    }
+
+    fn load_profiles(&self) -> Vec<Profile> {
+        let json_string = match fs::read_to_string(&self.storage_dir) {
+            Ok(data) => data,
+            Err(_) => return vec![],
+        };
+
+        match serde_json::from_str(&json_string) {
+            Ok(data) => data,
+            Err(_) => vec![],
+        }
+    }
+
+    fn save_profiles(&self, profiles: &Vec<Profile>) {
+        let json = match serde_json::to_string(profiles) {
+            Ok(json) => json,
+            Err(_) => "[]".to_string(),
+        };
+        
+        // TODO: write to file
+        File::metadata(&self.storage_dir).is_ok()
     }
 }
