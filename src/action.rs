@@ -3,6 +3,7 @@ use std::fmt::Display;
 pub enum ActionType {
     CreateProfile,
     SelectProfile,
+    DeleteProfile,
 }
 
 impl ActionType {
@@ -10,6 +11,7 @@ impl ActionType {
         match self {
             ActionType::CreateProfile => "Create profile".to_string(),
             ActionType::SelectProfile => "Select profile".to_string(),
+            ActionType::DeleteProfile => "Delete profile".to_string(),
          }
     }
     
@@ -18,6 +20,7 @@ impl ActionType {
         return vec![
             ActionType::CreateProfile,
             ActionType::SelectProfile,
+            ActionType::DeleteProfile,
         ];
     }
 }

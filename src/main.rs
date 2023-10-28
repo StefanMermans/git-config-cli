@@ -1,5 +1,5 @@
 use action::ActionType;
-use inquire::{Select, Text, Confirm};
+use inquire::{Select, Text, Confirm, MultiSelect};
 use profile::Profile;
 use crate::storage::Storage;
 
@@ -34,11 +34,21 @@ fn create_credentials_actions(storage: &mut Storage) {
 }
 
 fn select_profile(storage: &Storage) {
-    let selected = Select::new("What user do you want to use", storage.credentials_vec())
+    let selected = Select::new("What user do you want to use", storage.profiles())
         .prompt()
         .unwrap();
 
     println!("Will use email {}", selected.email);
+}
+
+fn delete_profile(storage: &mut Storage) {
+    let selected = MultiSelect::new("Select profiles to delete", storage.profiles())
+        .prompt()
+        .unwrap();
+
+    for profile in selected {
+        storage.delete_profile(&profile);
+    }
 }
 
 fn main() {
@@ -51,5 +61,6 @@ fn main() {
     match action {
         ActionType::SelectProfile => select_profile(&storage),
         ActionType::CreateProfile => create_credentials_actions(&mut storage),
+        ActionType::DeleteProfile => delete_profile(&mut storage),
     }
 }
