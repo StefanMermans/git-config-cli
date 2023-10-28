@@ -1,16 +1,18 @@
-use std::fs::{self, File};
+use std::fs::{self};
 
 use crate::profile::Profile;
 
 pub struct Storage {
-    storage_dir: String,
+    file: String,
+    dir: String,
 }
 
 impl Storage {
     pub fn new() -> Self{
         Self {
             // TODO: Dynamic storage dir
-            storage_dir: "./data/profiles.json".to_string(),
+            dir: "./data".to_string(),
+            file: "profiles.json".to_string(),
         }   
     }
 
@@ -35,7 +37,7 @@ impl Storage {
     }
 
     fn load_profiles(&self) -> Vec<Profile> {
-        let json_string = match fs::read_to_string(&self.storage_dir) {
+        let json_string = match fs::read_to_string(&self.full_path()) {
             Ok(data) => data,
             Err(_) => return vec![],
         };
@@ -52,7 +54,13 @@ impl Storage {
             Err(_) => "[]".to_string(),
         };
         
-        // TODO: write to file
-        File::metadata(&self.storage_dir).is_ok()
+        println!("Saving: {}", &json);
+
+        fs::create_dir_all(&self.dir).expect("Failed to create all dirs");
+        fs::write(&self.full_path(), json).expect("Failed to save file");
+    }
+
+    fn full_path(&self) -> String {
+        return format!("{}/{}", &self.dir, &self.file)
     }
 }
