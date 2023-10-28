@@ -1,4 +1,5 @@
 use action::ActionType;
+use git_config::GitConfig;
 use inquire::{Select, Text, Confirm, MultiSelect};
 use profile::Profile;
 use crate::storage::Storage;
@@ -46,7 +47,8 @@ fn select_profile(storage: &Storage) {
         .prompt()
         .unwrap();
 
-    println!("Will use email {}", selected.email);
+    let git_config = GitConfig{};
+    git_config.set_local_profile(&selected);
 }
 
 fn delete_profile(storage: &mut Storage) {
@@ -60,7 +62,10 @@ fn delete_profile(storage: &mut Storage) {
 }
 
 fn main() {
-    let mut storage = Storage::new();
+    let mut storage = Storage::new(
+        "./data".to_string(),
+        "profiles.json".to_string(),
+    );
 
     let action = Select::new("What do you want to do?", ActionType::as_vec()) 
         .prompt()

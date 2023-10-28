@@ -8,11 +8,10 @@ pub struct Storage {
 }
 
 impl Storage {
-    pub fn new() -> Self{
+    pub fn new(dir: String, file: String) -> Self{
         Self {
-            // TODO: Dynamic storage dir
-            dir: "./data".to_string(),
-            file: "profiles.json".to_string(),
+            dir,
+            file,
         }   
     }
 
