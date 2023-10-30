@@ -1,5 +1,5 @@
 use action::ActionType;
-use git_config::GitConfig;
+use git_config::set_local_profile;
 use inquire::{Select, Text, Confirm, MultiSelect};
 use profile::Profile;
 use crate::storage::Storage;
@@ -47,8 +47,7 @@ fn select_profile(storage: &Storage) {
         .prompt()
         .unwrap();
 
-    let git_config = GitConfig{};
-    git_config.set_local_profile(&selected);
+    set_local_profile(&selected);
 }
 
 fn delete_profile(storage: &mut Storage) {

@@ -53,8 +53,6 @@ impl Storage {
             Err(_) => "[]".to_string(),
         };
         
-        println!("Saving: {}", &json);
-
         fs::create_dir_all(&self.dir).expect("Failed to create all dirs");
         fs::write(&self.full_path(), json).expect("Failed to save file");
     }
