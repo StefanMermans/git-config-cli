@@ -12,9 +12,9 @@ impl ActionType {
             ActionType::CreateProfile => "Create profile".to_string(),
             ActionType::SelectProfile => "Select profile".to_string(),
             ActionType::DeleteProfile => "Delete profile".to_string(),
-         }
+        }
     }
-    
+
     pub fn as_vec() -> Vec<ActionType> {
         // This is kinda annoying when adding new actions
         return vec![
@@ -26,8 +26,7 @@ impl ActionType {
 }
 
 impl Display for ActionType {
-     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.label())
     }
 }
-

@@ -1,5 +1,5 @@
+use serde::{Deserialize, Serialize};
 use std::fmt::Display;
-use serde::{Serialize, Deserialize};
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Profile {
@@ -13,4 +13,3 @@ impl Display for Profile {
         write!(f, "{}", self.title)
     }
 }
-

@@ -1,30 +1,29 @@
+use crate::storage::Storage;
 use action::ActionType;
 use git_config::set_local_profile;
-use inquire::{Select, Text, Confirm, MultiSelect};
+use inquire::{Confirm, MultiSelect, Select, Text};
 use profile::Profile;
-use crate::storage::Storage;
 
-mod profile;
 mod action;
-mod storage;
 mod git_config;
+mod profile;
+mod storage;
 
 fn create_credentials_actions(storage: &mut Storage) {
     let name = Text::new("Enter a name").prompt().unwrap();
     let email = Text::new("Enter an email").prompt().unwrap();
-    let title = Text::new("What should the profile be called?").prompt().unwrap();
-
-    let credentials = Profile {
-        title,
-        email,
-        name,
-    };
-
-    println!("Creating profile\nTitle: {}\nName:  {}\nEmail: {}", &credentials.title, &credentials.name, &credentials.email); 
-
-    let confirm = Confirm::new("Is this correct? (y/n)")
+    let title = Text::new("What should the profile be called?")
         .prompt()
         .unwrap();
+
+    let credentials = Profile { title, email, name };
+
+    println!(
+        "Creating profile\nTitle: {}\nName:  {}\nEmail: {}",
+        &credentials.title, &credentials.name, &credentials.email
+    );
+
+    let confirm = Confirm::new("Is this correct? (y/n)").prompt().unwrap();
 
     if !confirm {
         create_credentials_actions(storage);
@@ -61,12 +60,9 @@ fn delete_profile(storage: &mut Storage) {
 }
 
 fn main() {
-    let mut storage = Storage::new(
-        "./data".to_string(),
-        "profiles.json".to_string(),
-    );
+    let mut storage = Storage::new("/.gitConfigCli".to_string(), "profiles.json".to_string());
 
-    let action = Select::new("What do you want to do?", ActionType::as_vec()) 
+    let action = Select::new("What do you want to do?", ActionType::as_vec())
         .prompt()
         .unwrap();
 

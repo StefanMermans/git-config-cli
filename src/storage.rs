@@ -8,24 +8,24 @@ pub struct Storage {
 }
 
 impl Storage {
-    pub fn new(dir: String, file: String) -> Self{
-        Self {
-            dir,
-            file,
-        }   
+    pub fn new(dir: String, file: String) -> Self {
+        Self { dir, file }
     }
 
     pub fn delete_profile(&mut self, profile_to_delete: &Profile) {
         let mut profiles = self.load_profiles();
-        
-        if let Some(index) = profiles.iter().position(|profile| profile.title == profile_to_delete.title) {
+
+        if let Some(index) = profiles
+            .iter()
+            .position(|profile| profile.title == profile_to_delete.title)
+        {
             profiles.swap_remove(index);
         }
 
         self.save_profiles(&profiles);
     }
 
-    pub fn profiles(&self) -> Vec<Profile>  {
+    pub fn profiles(&self) -> Vec<Profile> {
         self.load_profiles()
     }
 
@@ -52,12 +52,12 @@ impl Storage {
             Ok(json) => json,
             Err(_) => "[]".to_string(),
         };
-        
+
         fs::create_dir_all(&self.dir).expect("Failed to create all dirs");
         fs::write(&self.full_path(), json).expect("Failed to save file");
     }
 
     fn full_path(&self) -> String {
-        return format!("{}/{}", &self.dir, &self.file)
+        return format!("{}/{}", &self.dir, &self.file);
     }
 }
