@@ -1,3 +1,5 @@
+use std::env::{home_dir, self};
+
 use crate::storage::Storage;
 use action::ActionType;
 use git_config::set_local_profile;
@@ -60,7 +62,9 @@ fn delete_profile(storage: &mut Storage) {
 }
 
 fn main() {
-    let mut storage = Storage::new("/.gitConfigCli".to_string(), "profiles.json".to_string());
+    let home = env::var("HOME").unwrap();
+    let storage_dir = format!("{}/.config/git-config-cli", home);
+    let mut storage = Storage::new(storage_dir, "profiles.json".to_string());
 
     let action = Select::new("What do you want to do?", ActionType::as_vec())
         .prompt()
