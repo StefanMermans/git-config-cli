@@ -1,4 +1,4 @@
-use std::env::{home_dir, self};
+use std::env;
 
 use crate::storage::Storage;
 use action::ActionType;
